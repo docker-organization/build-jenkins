@@ -1,24 +1,30 @@
 version: '3.7'
 services:
   jenkins:
-    image: yallalabs/jenkins:centos
+    image: my-docker
+    restart: always
     environment:
       #- JAVA_OPTS=-Dhudson.footerURL=http://yallalabs.com
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false -Dhudson.footerURL=http://yallalabs.com -Duser.timezone=Europe/Rome
       - JENKINS_USER=admin
-      - JENKINS_PASS=CHANGE_ME
+      - JENKINS_PASS=admin
     ports:
-      - 80:8080
-      - 443:8443
-      - 50000:50000
+      - 8080:8080
+      # - 443:8443
+      # - 50000:50000
+    container_name: my-jenkins
     volumes:
-      - jenkins_data:/var/jenkins_home
+      - my-customer-volume:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-     
+      - chmod 666 /var/run/docker.sock
 volumes:
-  jenkins_data:
-    driver: local
-    driver_opts:
-      type: "none"
-      o: "bind"
-      device: "/jenkinsdata"
+  my-customer-volume:
+    external: true
+    # driver: local
+# volumes:
+#   jenkins_data:
+#     driver: local
+#     driver_opts:
+#       type: "none"
+#       o: "bind"
+#       device: "~/jenkinsdata"
